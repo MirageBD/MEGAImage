@@ -119,7 +119,7 @@ uielement_press
 		ora #UISTATE::pressed
 		sta (zpptr0),y
 
-		jsr uikeyboard_disablecursor
+		;jsr uikeyboard_disablecursor
 
     	rts
 

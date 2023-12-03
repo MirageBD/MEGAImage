@@ -14,8 +14,8 @@ img_rowchars
 
 img_rendinit
 
-		lda #$00
-		sta $d015
+		;lda #$00
+		;sta $d015
 
 		lda #$32										; pal screen start
 		sta palntscscreenstart
@@ -340,7 +340,7 @@ img_render_irq
 
 img_render_irq_loop
 
-		;lda #$8f
+		;lda #$8c
 		;sta $d020
 
 		lda $d070										; BANK IN BITMAP PALETTE - select mapped bank with the upper 2 bits of $d070
@@ -388,7 +388,7 @@ imgrucb		.word $0000										; src
 			sta $d707										; inline DMA copy
 			.byte $00										; end of job options
 			.byte $00										; copy
-			.word 128										; count
+			.word 80										; count
 imgrucrr	.word $0000										; src
 			.byte $00										; src bank and flags
 			.word $d108										; dst
@@ -399,7 +399,7 @@ imgrucrr	.word $0000										; src
 			sta $d707										; inline DMA copy
 			.byte $00										; end of job options
 			.byte $00										; copy
-			.word 128										; count
+			.word 80										; count
 imgrucgr	.word $0000										; src
 			.byte $00										; src bank and flags
 			.word $d208										; dst
@@ -410,7 +410,7 @@ imgrucgr	.word $0000										; src
 			sta $d707										; inline DMA copy
 			.byte $00										; end of job options
 			.byte $00										; copy
-			.word 128										; count
+			.word 80										; count
 imgrucbr	.word $0000										; src
 			.byte $00										; src bank and flags
 			.word $d308										; dst
@@ -475,11 +475,12 @@ imgrucbr	.word $0000										; src
 		beq :+
 		jmp img_render_irq_loop
 
-:		lda #$08
+:		lda #$00
 		sta $d020
 
-		jsr mouse_update
-		jsr keyboard_update
+		jsr ui_update
+		;jsr uimouse_update
+		;jsr uikeyboard_update
 
 		lda mouse_released
 		beq :+

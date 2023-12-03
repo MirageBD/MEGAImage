@@ -1,13 +1,14 @@
 ; ----------------------------------------------------------------------------------------------------
 
+.define sprptrs					$c400
+
 .define uipal					$ca00	; size = $0300
 .define spritepal				$cd00
 
 .define screen					$e000	; size = 80*50*2 = $1f40
 
-.define sprites					$f200
+.define sprites					$c000
 .define kbsprites				$f300
-.define sprptrs					$f3c0
 .define imgchars				$f400	; 40 * 64 = $0a00
 
 .define uichars					$10000	; $10000 - $14000     size = $4000
@@ -65,8 +66,8 @@ main_restart
 		eom
 
 														; don't force anything. should work in both NTSC and PALs
-		lda #%10000000									; force PAL mode, because I can't be bothered with fixing it for NTSC
-		trb $d06f										; clear bit 7 for PAL ; trb $d06f 
+		;lda #%10000000									; force PAL mode, because I can't be bothered with fixing it for NTSC
+		;trb $d06f										; clear bit 7 for PAL ; trb $d06f 
 		;tsb $d06f										; set bit 7 for NTSC  ; tsb $d06f
 
 		lda #%11111000									; unmap c65 roms $d030 by clearing bits 3-7
@@ -93,6 +94,7 @@ main_restart
 		jsr ui_setup
 
 		jsr keyboard_update
+		jsr mouse_update
 
 		lda #<fa1filebox
 		sta uikeyboard_focuselement+0

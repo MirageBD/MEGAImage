@@ -98,7 +98,7 @@ ui_init
 		lda #%00000000
 		sta $d015
 		sta $d01b										; sprite background priority
-		;jsr uimouse_enablecursor
+		jsr uimouse_enablecursor
 
 		lda #%11111111
 		sta $d076										; enable SPRENVV400 for this sprite
