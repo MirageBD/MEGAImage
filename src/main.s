@@ -35,15 +35,6 @@
 .segment "SPRITEPAL"
 		.incbin "../bin/cursor_pal1.bin"
 
-.segment "DATA0A00"
-		.incbin "../bin/data0a00.bin"
-
-.segment "DATA4000"
-		.incbin "../bin/data4000.bin"
-
-.segment "YCBCC2RGB"
-		.incbin "../bin/ycbcc2rgb.bin"
-
 .segment "MAIN"
 
 entry_main

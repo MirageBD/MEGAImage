@@ -50,9 +50,6 @@ BINFILES += $(BIN_DIR)/glyphs_pal1.bin
 BINFILES += $(BIN_DIR)/cursor_sprites1.bin
 BINFILES += $(BIN_DIR)/kbcursor_sprites1.bin
 BINFILES += $(BIN_DIR)/cursor_pal1.bin
-BINFILES += $(BIN_DIR)/data0a00.bin
-BINFILES += $(BIN_DIR)/data4000.bin
-BINFILES += $(BIN_DIR)/ycbcc2rgb.bin
 
 $(BIN_DIR)/font_chars1.bin: $(BIN_DIR)/font.bin
 	$(MC) $< cm1:1 d1:0 cl1:10000 rc1:0
