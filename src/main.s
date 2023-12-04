@@ -1,15 +1,16 @@
 ; ----------------------------------------------------------------------------------------------------
 
-.define sprptrs					$c400
+.define sprptrs					$0800
+.define uipal					$0900	; size = $0300
+.define spritepal				$0c00
 
-.define uipal					$ca00	; size = $0300
-.define spritepal				$cd00
+.define sprites					$1000
+.define kbsprites				$1100
 
-.define screen					$e000	; size = 80*50*2 = $1f40
+.define imgchars				$c000	; 40 * 64 = $0a00
 
-.define sprites					$c000
-.define kbsprites				$f300
-.define imgchars				$f400	; 40 * 64 = $0a00
+.define screen					$8000	; size = 80*50*2 = $1f40
+.define imgscreen				$a000	; size = 80*50*2 = $1f40
 
 .define uichars					$10000	; $10000 - $14000     size = $4000
 .define glchars					$14000	; $14000 - $1d000     size = $9000
@@ -180,14 +181,14 @@ irq1
 		sta $d012
 
 		lda main_event
-		cmp #$01
-		beq set_img_load_irq
+		cmp #$02
+		beq set_img_render_irq
 		bra continueirq
 
-set_img_load_irq
-		lda #<img_load_irq
+set_img_render_irq
+		lda #<img_render_irq
 		sta $fffe
-		lda #>img_load_irq
+		lda #>img_render_irq
 		sta $ffff
 		plz
 		ply
@@ -196,6 +197,24 @@ set_img_load_irq
 		plp
 		asl $d019
 		rti
+
+;		lda main_event
+;		cmp #$01
+;		beq set_img_load_irq
+;		bra continueirq
+
+;set_img_load_irq
+;		lda #<img_load_irq
+;		sta $fffe
+;		lda #>img_load_irq
+;		sta $ffff
+;		plz
+;		ply
+;		plx
+;		pla
+;		plp
+;		asl $d019
+;		rti
 
 continueirq
 		lda #<irq1

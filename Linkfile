@@ -5,12 +5,14 @@ MEMORY
 
 SEGMENTS
 {
+	GLYPHSPAL:		load=RAM, start=$0900;
+	SPRITEPAL:		load=RAM, start=$0c00;
+	CURSORSPRITES:	load=RAM, start=$1000;
+	KBSPRITES:		load=RAM, start=$1100;
+
 	MAIN:			load=RAM, start=$2100;
 	TEXT:			load=RAM, align=256;
-	CURSORSPRITES:	load=RAM, start=$c000;
-	GLYPHSPAL:		load=RAM, start=$ca00;
-	SPRITEPAL:		load=RAM, start=$cd00;
-	KBSPRITES:		load=RAM, start=$f300;
+
 	FONT:			load=RAM, start=$10000;
 	GLYPHS:			load=RAM, start=$14000;
 }

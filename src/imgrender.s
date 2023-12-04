@@ -10,7 +10,7 @@ img_misccounter
 		.byte 0
 
 img_rowchars
-		.byte 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,1,2,3,4,5,6,7,8,9,10
+		.byte 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,    1,2,3,4,5,6,7,8,9,10
 
 img_rendinit
 
@@ -82,7 +82,7 @@ img_rendinit
 
 img_fillsetaltpalbits
 
-		ldz #30*2
+		ldz #30*2										; set columns 30-40 to use alt palette
 		lda #%01101111
 :		sta [uidraw_colptr],z
 		inz
@@ -128,6 +128,7 @@ imgri1	sta imgchars,x
 		inx
 		cpx #64
 		bne :-
+
 		clc
 		lda imgri1+1
 		adc #64
@@ -150,13 +151,13 @@ imgri1	sta imgchars,x
 		sta screencolumn
 		sta screenrow
 
-		lda #<(screen+0)
+		lda #<(imgscreen+0)
 		sta put0+1
-		lda #>(screen+0)
+		lda #>(imgscreen+0)
 		sta put0+2
-		lda #<(screen+1)
+		lda #<(imgscreen+1)
 		sta put1+1
-		lda #>(screen+1)
+		lda #>(imgscreen+1)
 		sta put1+2
 
 		; imgchars = $f000
@@ -167,10 +168,10 @@ putstart
 		clc
 		lda img_rowchars,x								; char to plot
 		adc #<(imgchars/64)
-put0	sta screen+0									; plot left of 2 chars
+put0	sta imgscreen+0									; plot left of 2 chars
 
 		lda #>(imgchars/64)
-put1	sta screen+1									; plot right of 2 chars
+put1	sta imgscreen+1									; plot right of 2 chars
 
 		clc												; add 2 to screenpos low
 		lda put0+1
@@ -215,7 +216,7 @@ endscreenplot
 		lda #$00
 		sta $d016
 
-		lda #$50		; set TEXTXPOS to same as SDBDRWDLSB
+		lda #$50										; set TEXTXPOS to same as SDBDRWDLSB
 		lda $d04c
 		lda #$42
 		sta $d05c
@@ -225,53 +226,16 @@ endscreenplot
 		lda #25
 		sta $d07b										; Display 25 rows of text
 
+		lda #<imgscreen									; set pointer to screen ram
+		sta $d060
+		lda #>imgscreen
+		sta $d061
+		lda #(imgscreen & $ff0000) >> 16
+		sta $d062
+		lda #$00
+		sta $d063
+
         rts
-
-; ----------------------------------------------------------------------------------------------------------------------------------------
-
-img_load_irq
-
-		php
-		pha
-		phx
-		phy
-		phz
-
-;		ldx #$00
-;:		inc $d020
-;		inx
-;		bne :-
-
-		jsr mouse_update
-		jsr keyboard_update
-
-		lda main_event
-		cmp #$02
-		beq set_img_render_irq
-
-		lda palntscscreenstart
-		sta $d012
-
-		plz
-		ply
-		plx
-		pla
-		plp
-		asl $d019
-		rti
-
-set_img_render_irq
-		lda #<img_render_irq
-		sta $fffe
-		lda #>img_render_irq
-		sta $ffff
-		plz
-		ply
-		plx
-		pla
-		plp
-		asl $d019
-		rti
 
 ; ----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -478,9 +442,10 @@ imgrucbr	.word $0000										; src
 :		lda #$00
 		sta $d020
 
-		jsr ui_update
-		;jsr uimouse_update
-		;jsr uikeyboard_update
+		;jsr ui_update
+		jsr mouse_update
+		jsr uimouse_update
+		jsr keyboard_update
 
 		lda mouse_released
 		beq :+
