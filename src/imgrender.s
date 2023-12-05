@@ -27,14 +27,26 @@ img_rendinit
 
 		; WHY THE HELL DO I NEED TO FILL 2 PALETTES HERE???
 
+		lda $d070										; BANK IN BITMAP PALETTE - select mapped bank with the upper 2 bits of $d070
+		and #%00111111
+		sta $d070
+
+		lda #$00
+		ldx #$00										; set bitmap palette
+:		sta $d100,x
+		sta $d200,x
+		sta $d300,x
+		inx
+		bne :-
+
 		lda $d070										; select mapped bank with the upper 2 bits of $d070
 		and #%00111111
 		ora #%10000000									; select palette 02
 		sta $d070
 
+		lda #$00
 		ldx #$00										; set bitmap palette
-:		txa
-		sta $d100,x
+:		sta $d100,x
 		sta $d200,x
 		sta $d300,x
 		inx
@@ -45,25 +57,20 @@ img_rendinit
 		ora #%11000000									; select palette 03
 		sta $d070
 
+		lda #$00
 		ldx #$00										; set bitmap palette
-:		txa
-		sta $d100,x
+:		sta $d100,x
 		sta $d200,x
 		sta $d300,x
 		inx
 		bne :-
 
-
-
-
-
-
-
-
 		lda $d070
 		and #%11111100									; set alt palette to 2
 		ora #%00000010
 		sta $d070
+
+
 
 		; DMA_RUN_JOB imgrender_clearbitmapjob
 		DMA_RUN_JOB imgrender_clearcolorramjob
