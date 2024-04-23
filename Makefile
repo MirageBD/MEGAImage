@@ -28,6 +28,7 @@ MC				= MegaConvert
 MEGAADDRESS		= megatool -a
 MEGACRUNCH		= megatool -c
 MEGAIFFL		= megatool -i
+MEGAIMAGE		= megatool -x
 MEGAMOD			= MegaMod
 EL				= etherload
 XMEGA65			= H:\xemu\xmega65.exe
@@ -50,6 +51,7 @@ BINFILES += $(BIN_DIR)/glyphs_pal1.bin
 BINFILES += $(BIN_DIR)/cursor_sprites1.bin
 BINFILES += $(BIN_DIR)/kbcursor_sprites1.bin
 BINFILES += $(BIN_DIR)/cursor_pal1.bin
+BINFILES += $(BIN_DIR)/test1.mim
 
 $(BIN_DIR)/font_chars1.bin: $(BIN_DIR)/font.bin
 	$(MC) $< cm1:1 d1:0 cl1:10000 rc1:0
@@ -62,6 +64,9 @@ $(BIN_DIR)/cursor_sprites1.bin: $(BIN_DIR)/cursor.bin
 
 $(BIN_DIR)/kbcursor_sprites1.bin: $(BIN_DIR)/kbcursor.bin
 	$(MC) $< cm1:1 d1:0 cl1:14000 rc1:0 sm1:1
+
+$(BIN_DIR)/test1.mim: $(BIN_DIR)/test1.raw
+	$(MEGAIMAGE) $(BIN_DIR)/test1.raw $(BIN_DIR)/test1.mim
 
 $(EXE_DIR)/boot.o:	$(SRC_DIR)/boot.s \
 					$(SRC_DIR)/main.s \
