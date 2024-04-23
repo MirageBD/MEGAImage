@@ -309,6 +309,9 @@ img_render_irq
 		lda #$00
 		sta $d020
 
+		lda #$07
+		sta $d020
+
 img_render_irq_loop
 
 		;lda #$8c
